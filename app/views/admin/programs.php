@@ -1,0 +1,11 @@
+<h4>Programs &amp; Quotas</h4><table class="table bg-white shadow-sm"><tr><th>Code</th><th>Name</th><th>Seats</th><th>Left</th><th>Min avg/each</th><th>Deadline</th><th></th></tr>
+<?php foreach($rows as $r): ?><tr><td><?= e($r['code']) ?></td><td><?= e($r['name']) ?></td><td><?= e($r['seats']) ?></td><td><?= e($r['seats_left']) ?></td><td><?= e($r['min_avg']) ?>/<?= e($r['min_each']) ?></td><td><?= e($r['deadline']) ?></td>
+<td class="text-nowrap"><?php if(user()['role']==='admin'): ?><a class="btn btn-sm btn-outline-secondary" href="?edit=<?= $r['id'] ?>">Edit</a> <?php endif; ?>
+<form method="post" action="<?= url('admin/programs/'.$r['id'].'/allocate') ?>" class="d-inline"><?= csrf_field() ?><button class="btn btn-sm btn-warning">Run merit shortlist</button></form></td></tr><?php endforeach; ?></table>
+<?php if(user()['role']==='admin'): $x=$edit?:[]; ?><div class="card card-body shadow-sm"><h6><?= $x?'Edit':'Add' ?> program</h6><?php foreach($errors as $er): ?><div class="text-danger small"><?= e($er) ?></div><?php endforeach; ?>
+<form method="post" action="<?= url('admin/programs/save') ?>" class="row g-2"><?= csrf_field() ?><input type="hidden" name="id" value="<?= e($x['id']??'') ?>">
+<div class="col-md-2"><input name="code" class="form-control" placeholder="Code" value="<?= e($x['code']??'') ?>"></div><div class="col-md-5"><input name="name" class="form-control" placeholder="Name" value="<?= e($x['name']??'') ?>"></div>
+<div class="col-md-2"><input name="seats" type="number" class="form-control" placeholder="Seats" value="<?= e($x['seats']??'') ?>"></div><div class="col-md-3"><input name="deadline" type="date" class="form-control" value="<?= e($x['deadline']??'') ?>"></div>
+<div class="col-md-2"><input name="min_avg" class="form-control" placeholder="Min avg" value="<?= e($x['min_avg']??'') ?>"></div><div class="col-md-2"><input name="min_each" class="form-control" placeholder="Min each" value="<?= e($x['min_each']??'') ?>"></div>
+<div class="col-md-5"><input name="description" class="form-control" placeholder="Description" value="<?= e($x['description']??'') ?>"></div><div class="col-md-2 pt-2"><label><input type="checkbox" name="is_open" <?= ($x['is_open']??1)?'checked':'' ?>> Open</label></div>
+<div class="col-12"><button class="btn btn-primary">Save program</button></div></form></div><?php endif; ?>
